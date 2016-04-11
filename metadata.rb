@@ -1,0 +1,7 @@
+name 'web'
+maintainer 'Luis De Siqueira'
+maintainer_email 'LouTheBrew@gmail.com'
+license 'all_rights'
+description 'Installs/Configures web things'
+long_description 'Installs/Configures web things'
+version '0.1.0'
