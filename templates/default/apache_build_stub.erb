@@ -1,0 +1,7 @@
+./configure \
+<%@context[:options][:opts].each do |opt|%>
+  <%="#{opt[:key]}=#{opt[:val]}"%> \
+<%end%>
+<%@context[:options][:list_opts].each do |opt|%>
+  <%=opt%> \
+<%end%>
