@@ -1,7 +1,12 @@
 name 'web'
 maintainer 'Luis De Siqueira'
 maintainer_email 'LouTheBrew@gmail.com'
-license 'all_rights'
+license 'MIT'
 description 'Installs/Configures web things'
 long_description 'Installs/Configures web things'
 version '0.1.0'
+
+depends 'poise'
+depends 'build-essential'
+depends 's3'
+depends 'fpm'
