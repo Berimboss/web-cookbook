@@ -11,9 +11,9 @@ module Configuration
     attribute :name, name_attribute: true, kind_of: String
     attribute :root_dir, required: true, default: '/usr/local/apache2/conf/'
     attribute :stub, required: true, default: 'httpd.conf.erb'
-    attribute :local_cookbook, kind_of:String, default: 'web'
+    attribute :local_cookbook, kind_of:String, default: 'poise-web'
     attribute :context, required: true, default: {}
-    attribute :includes, kind_of: Array, default: %w{globals/* ports/* modules/* forwarders/* statics/*}
+    attribute :includes, kind_of: Array, default: %w{globals ports modules forwarders statics}
   end
   class Provider < Chef::Provider
     include Poise
@@ -22,20 +22,10 @@ module Configuration
       directory new_resource.root_dir do
         recursive true
       end
-      directory "#{new_resource.root_dir}modules/" do
-        recursive true
-      end
-      directory "#{new_resource.root_dir}forwarders/" do
-        recursive true
-      end
-      directory "#{new_resource.root_dir}statics/" do
-        recursive true
-      end
-      directory "#{new_resource.root_dir}globals/" do
-        recursive true
-      end
-      directory "#{new_resource.root_dir}ports/" do
-        recursive true
+      new_resource.includes.each do |inc|
+        directory "#{new_resource.root_dir}#{inc}/" do
+          recursive true
+        end
       end
       yield
     end

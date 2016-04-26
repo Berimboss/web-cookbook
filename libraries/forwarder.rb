@@ -9,7 +9,7 @@ module Forwarder
     actions :apply
     attribute :name, name_attribute:true, kind_of: String
     attribute :root_dir, required: true, kind_of: String, default: '/usr/local/apache2/conf/forwarders/'
-    attribute :local_cookbook, required: true, kind_of: String, default: 'web'
+    attribute :local_cookbook, required: true, kind_of: String, default: 'poise-web'
     attribute :stub, required: true, kind_of: String, default: 'forwarder.conf.erb'
     attribute :context, required: true, kind_of: Hash, default: {}
   end

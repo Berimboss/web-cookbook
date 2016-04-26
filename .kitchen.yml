@@ -29,5 +29,5 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[web::default]
+      - recipe[poise-web::default]
     attributes:

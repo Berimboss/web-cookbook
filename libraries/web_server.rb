@@ -12,7 +12,7 @@ module WebServer
     # name triggers implementation strategy
     attribute :name, name_attribute: true, kind_of: String
 
-    attribute :local_cookbook, kind_of:String, default: 'web'
+    attribute :local_cookbook, kind_of:String, default: 'poise-web'
 
     # General Web Server Interfaces
     # version can apply to any web server version

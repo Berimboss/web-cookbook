@@ -8,8 +8,8 @@ module Static
     provides :static
     actions :apply
     attribute :name, name_attribute:true, kind_of: String
-    attribute :root_dir, required: true, kind_of: String, default: '/usr/local/apache2/conf/modules/'
-    attribute :local_cookbook, required: true, kind_of: String, default: 'web'
+    attribute :root_dir, required: true, kind_of: String, default: '/usr/local/apache2/conf/statics/'
+    attribute :local_cookbook, required: true, kind_of: String, default: 'poise-web'
     attribute :stub, required: true, kind_of: String, default: 'static.conf.erb'
     attribute :context, required: true, kind_of: Hash, default: {}
   end
