@@ -8,6 +8,9 @@ module Static
     provides :static
     actions :apply
     attribute :name, name_attribute:true, kind_of: String
+    attribute :mode, kind_of: String, required: true, default: '755'
+    attribute :user, kind_of: String, required: true, default: 'root'
+    attribute :group, kind_of: String, required: true, default: 'root'
     attribute :root_dir, required: true, kind_of: String, default: '/usr/local/apache2/conf/statics/'
     attribute :local_cookbook, required: true, kind_of: String, default: 'poise-web'
     attribute :stub, required: true, kind_of: String, default: 'static.conf.erb'

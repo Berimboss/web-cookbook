@@ -3,16 +3,16 @@ include_recipe 'build-essential'
 poise_service_user 'apache'
 s3 = true
 no_package = false
-web_server 'apache2' do
-  action :build
-  if s3
-    s3_upload true
-    s3_bucket 'anaplan-devops'
-  end
-  if no_package
-    package false
-  end
-end
+#web_server 'apache2' do
+#  action :build
+#  if s3
+#    s3_upload true
+#    s3_bucket 'anaplan-devops'
+#  end
+#  if no_package
+#    package false
+#  end
+#end
 directory '/server' do
   recursive true
 end
@@ -29,17 +29,38 @@ package '/server/apache2.rpm'
 configuration 'test configuration'
 configuration 'purge it' do
   action :purge
+  user 'apache'
+  group 'apache'
 end
-configuration 'test configuration again'
+configuration 'test configuration again' do
+  user 'apache'
+  group 'apache'
+end
 mod 'ssl_module' do
   path '/usr/local/apache2/modules/mod_ssl.so'
+  user 'apache'
+  group 'apache'
 end
 mod 'unixd_module' do
   path '/usr/local/apache2/modules/mod_unixd.so'
+  user 'apache'
+  group 'apache'
+end
+mod 'authz_module' do
+  path '/usr/local/apache2/modules/mod_authz_core.so'
+  user 'apache'
+  group 'apache'
+end
+mod 'authn_core_module' do
+  path '/usr/local/apache2/modules/mod_authn_core.so'
+  user 'apache'
+  group 'apache'
 end
 static 'welcome'
 directory '/www/test/' do
   recursive true
+  user 'apache'
+  group 'apache'
 end
 file '/www/test/hello.html' do
   content <<-EOH
@@ -50,11 +71,11 @@ file '/www/test/hello.html' do
   </html>
   EOH
 end
-cookbook_file '/tmp/systemd.rpm' do
-  source 'systemd.rpm'
-end
-package '/tmp/systemd.rpm'
 poise_service 'apache2' do
-  provider :systemd
-  command '/usr/local/apache2/bin/httpd'
+  provider :sysvinit
+  command 'custom template so it doesnt matter'
+  options :pid_file => '/usr/local/apache2/logs/httpd.pid',
+    :template => 'service.altered.erb',
+    :command => '/usr/local/apache2/bin/httpd',
+    :apachectl_bin => '/usr/local/apache2/bin/apachectl'
 end

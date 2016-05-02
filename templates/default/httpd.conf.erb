@@ -1,3 +1,5 @@
+User <%=@context[:user]%>
+Group <%=@context[:group]%>
 <%@context[:includes].each do |inc|%>
 IncludeOptional conf/<%=inc%>/*
 <%end%>

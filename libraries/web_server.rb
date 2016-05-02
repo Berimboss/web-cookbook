@@ -1,6 +1,7 @@
 require 'poise'
 require 'chef/resource'
 require 'chef/provider'
+require 'brewfest'
 require_relative 'apache'
 
 module WebServer

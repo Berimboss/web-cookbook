@@ -9,6 +9,9 @@ module Configuration
     actions   :apply, :purge
 
     attribute :name, name_attribute: true, kind_of: String
+    attribute :mode, kind_of: String, required: true, default: '755'
+    attribute :user, kind_of: String, required: true, default: 'root'
+    attribute :group, kind_of: String, required: true, default: 'root'
     attribute :root_dir, required: true, default: '/usr/local/apache2/conf/'
     attribute :stub, required: true, default: 'httpd.conf.erb'
     attribute :local_cookbook, kind_of:String, default: 'poise-web'
@@ -32,9 +35,14 @@ module Configuration
     def action_apply
       given_the_givens do
         template "#{new_resource.root_dir}httpd.conf" do
+          user new_resource.user
+          group new_resource.group
+          mode new_resource.mode
           source new_resource.stub
           variables :context => {
-            :includes => new_resource.includes
+            :includes => new_resource.includes,
+            :user => new_resource.user,
+            :group => new_resource.group
           }
           cookbook new_resource.local_cookbook
           sensitive true
