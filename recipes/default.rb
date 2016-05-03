@@ -36,6 +36,11 @@ configuration 'test configuration again' do
   user 'apache'
   group 'apache'
 end
+mod 'dir_module' do
+  path '/usr/local/apache2/modules/mod_dir.so'
+  user 'apache'
+  group 'apache'
+end
 mod 'ssl_module' do
   path '/usr/local/apache2/modules/mod_ssl.so'
   user 'apache'
@@ -46,7 +51,7 @@ mod 'unixd_module' do
   user 'apache'
   group 'apache'
 end
-mod 'authz_module' do
+mod 'authz_core_module' do
   path '/usr/local/apache2/modules/mod_authz_core.so'
   user 'apache'
   group 'apache'
