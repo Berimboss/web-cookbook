@@ -1,6 +1,6 @@
 include_recipe 'build-essential'
 
 poise_service_user 'apache'
-web_server 'apache2' do
+path = web_server 'apache2' do
   action :build
 end

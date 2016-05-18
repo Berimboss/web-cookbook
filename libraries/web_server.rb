@@ -103,21 +103,6 @@ module WebServer
           :source => "apr-iconv-#{new_resource.apr_iconv_version}.tar.gz",
           :untar_name => "apr-iconv-#{new_resource.apr_iconv_version}",
         },
-        #{
-        #  :dest => "#{Chef::Config[:file_cache_path]}/pcre.tar.gz",
-        #  :source => "pcre-#{new_resource.pcre_version}.tar.gz",
-        #  :untar_name => "pcre-#{new_resource.pcre_version}",
-        #}
-        #{
-        #  :dest => "#{Chef::Config[:file_cache_path]}/ssl.tar.gz",
-        #  :source => "openssl-#{new_resource.ssl_version}.tar.gz",
-        #  :untar_name => "openssl-#{new_resource.ssl_version}",
-        #},
-        #{
-        #  :dest => "#{Chef::Config[:file_cache_path]}/ldap.tar.gz",
-        #  :source => "openldap-#{new_resource.ldap_version}.tar.gz",
-        #  :untar_name => "openldap-#{new_resource.ldap_version}",
-        #}
       ].each do |f|
         cookbook_file f[:dest] do
           source f[:source]
@@ -186,6 +171,7 @@ module WebServer
           bucket new_resource.s3_bucket
         end
       end
+      return "#{Chef::Config[:file_cache_path]}/#{new_resource.name}#{new_resource.package_format}"
     end
     def nginx_strategy
       # how to install nginx goes here
@@ -199,9 +185,10 @@ module WebServer
         when valid_web_servers[0][:name]
           nginx_strategy
         when valid_web_servers[1][:name]
-          apache_strategy
+          pkg = apache_strategy
         end
       end
+      return pkg
     end
   end
 end
