@@ -14,6 +14,7 @@ module WebServer
     attribute :resource_deps, default: true
     attribute :build_essential, default: 'build-essential'
     attribute :local_cookbook, kind_of:String, default: 'poise-web'
+    attribute :install_deps, default: true
     # General Web Server Interfaces
     # version can apply to any web server version
     attribute :httpd_version, kind_of: String, default: '2.4.20'
@@ -114,7 +115,9 @@ module WebServer
           not_if do ::File.exists?("#{Chef::Config[:file_cache_path]}/#{f[:untar_name]}") end
         end
       end
-      dependencies(new_resource.packages)
+      if new_resource.install_deps
+        dependencies(new_resource.packages)
+      end
       bash "prepare apache libraries" do
         cwd Chef::Config[:file_cache_path]
         code <<-EOH

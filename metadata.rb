@@ -4,7 +4,7 @@ maintainer_email 'LouTheBrew@gmail.com'
 license 'MIT'
 description 'Installs/Configures web things'
 long_description 'Installs/Configures web things'
-version '0.0.7'
+version '0.0.8'
 
 depends 'build-essential'
 depends 'poise'
