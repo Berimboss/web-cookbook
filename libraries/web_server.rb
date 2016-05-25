@@ -104,6 +104,7 @@ module WebServer
       ].each do |f|
         cookbook_file f[:dest] do
           source f[:source]
+          cookbook new_resource.local_cookbook
         end
         bash "untar" do
           cwd Chef::Config[:file_cache_path]
