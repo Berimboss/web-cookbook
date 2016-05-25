@@ -11,13 +11,12 @@ module WebServer
 
     # name triggers implementation strategy
     attribute :name, name_attribute: true, kind_of: String
-
+    attribute :resource_deps, default: true
+    attribute :build_essentials, default: 'build_essentials'
     attribute :local_cookbook, kind_of:String, default: 'poise-web'
-
     # General Web Server Interfaces
     # version can apply to any web server version
     attribute :httpd_version, kind_of: String, default: '2.4.20'
-
     # Apache interfaces
     attribute :apr_version, kind_of: String, default: '1.5.2'
     attribute :apr_util_version, kind_of: String, default: '1.5.4'
@@ -41,7 +40,6 @@ module WebServer
     ]
     # name of the template that builds apache
     attribute :apache_build_template, kind_of: String, default: 'apache_build_stub.erb'
-
     #Packaging interfaces
     # Use fpm to make this a package?
     attribute :package, kind_of: [TrueClass, FalseClass], default: true
@@ -178,6 +176,9 @@ module WebServer
       nil
     end
     def action_build
+      if new_resource.resource_deps
+        include_recipe new_resource.build_essentials
+      end
       unless verify_web_server({:name => new_resource.name, :version => new_resource.httpd_version})
         raise Exception.new("#{new_resource.name}::#{new_resource.httpd_version} is not a valid combination, try #{self.valid_web_servers}")
       else
