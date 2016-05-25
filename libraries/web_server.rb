@@ -12,7 +12,7 @@ module WebServer
     # name triggers implementation strategy
     attribute :name, name_attribute: true, kind_of: String
     attribute :resource_deps, default: true
-    attribute :build_essential, default: 'build_essential'
+    attribute :build_essential, default: 'build-essential'
     attribute :local_cookbook, kind_of:String, default: 'poise-web'
     # General Web Server Interfaces
     # version can apply to any web server version
@@ -177,7 +177,8 @@ module WebServer
     end
     def action_build
       if new_resource.resource_deps
-        include_recipe new_resource.build_essential
+        #include_recipe new_resource.build_essential
+        nil
       end
       unless verify_web_server({:name => new_resource.name, :version => new_resource.httpd_version})
         raise Exception.new("#{new_resource.name}::#{new_resource.httpd_version} is not a valid combination, try #{self.valid_web_servers}")
