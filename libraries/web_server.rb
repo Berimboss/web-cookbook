@@ -83,22 +83,22 @@ module WebServer
       Apache.buildit
       [
         {
-          :dest => "#{Chef::Config[:file_cache_path]}/httpd.tar.gz",
+          :dest => ::File.join(Chef::Config[:file_cache_path], 'httpd.tar.gz'),
           :source => "httpd-#{new_resource.httpd_version}.tar.gz",
           :untar_name => "httpd-#{new_resource.httpd_version}",
         },
         {
-          :dest => "#{Chef::Config[:file_cache_path]}/apr.tar.gz",
+          :dest => ::File.join(Chef::Config[:file_cache_path], 'apr.tar.gz'),
           :source => "apr-#{new_resource.apr_version}.tar.gz",
           :untar_name => "apr-#{new_resource.apr_version}",
         },
         {
-          :dest => "#{Chef::Config[:file_cache_path]}/apr-util.tar.gz",
+          :dest => ::File.join(Chef::Config[:file_cache_path], 'apr-util.tar.gz'),
           :source => "apr-util-#{new_resource.apr_util_version}.tar.gz",
           :untar_name => "apr-util-#{new_resource.apr_util_version}",
         },
         {
-          :dest => "#{Chef::Config[:file_cache_path]}/apr-iconv.tar.gz",
+          :dest => ::File.join(Chef::Config[:file_cache_path], 'apr-iconv.tar.gz'),
           :source => "apr-iconv-#{new_resource.apr_iconv_version}.tar.gz",
           :untar_name => "apr-iconv-#{new_resource.apr_iconv_version}",
         },
@@ -112,7 +112,7 @@ module WebServer
           code <<-EOH
           tar xzf #{f[:dest]}
           EOH
-          not_if do ::File.exists?("#{Chef::Config[:file_cache_path]}/#{f[:untar_name]}") end
+          not_if do ::File.exists?(::File.join(Chef::Config[:file_cache_path], f[:untar_name])) end
         end
       end
       if new_resource.install_deps
@@ -129,7 +129,7 @@ module WebServer
         # Don't do it if you've already moved the files
         not_if do ::File.exists?("whatever") end
       end
-      template "#{Chef::Config[:file_cache_path]}/httpd-#{new_resource.httpd_version}/build.sh" do
+      template ::File.join(Chef::Config[:file_cache_path], "httpd-#{new_resource.httpd_version}", '/build.sh') do
         source new_resource.apache_build_template
         cookbook new_resource.local_cookbook
         variables :context => {:options => {
@@ -140,7 +140,7 @@ module WebServer
       end
       # build Apache
       bash "httpd" do
-        cwd "#{Chef::Config[:file_cache_path]}/httpd-#{new_resource.httpd_version}"
+        cwd ::File.join(Chef::Config[:file_cache_path], "httpd-#{new_resource.httpd_version}")
         code <<-EOH
         bash build.sh
         make
@@ -166,14 +166,14 @@ module WebServer
         end
       end
       if new_resource.s3_upload
-        s3 'send it to the cloud' do
+        s3 "send it to the cloud" do
           action :upload
-          path "#{Chef::Config[:file_cache_path]}/#{new_resource.name}.#{new_resource.package_format}"
+          path ::File.join(Chef::Config[:file_cache_path], new_resource.name, ".#{new_resource.package_format}")
           key "#{new_resource.name}.#{new_resource.package_format}"
+          key ::File.join(new_resource.name, ".#{new_resource.package_format}")
           bucket new_resource.s3_bucket
         end
       end
-      return "#{Chef::Config[:file_cache_path]}/#{new_resource.name}#{new_resource.package_format}"
     end
     def nginx_strategy
       # how to install nginx goes here
