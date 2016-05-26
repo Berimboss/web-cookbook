@@ -169,7 +169,6 @@ module WebServer
         s3 "send it to the cloud" do
           action :upload
           path ::File.join(Chef::Config[:file_cache_path], new_resource.name, ".#{new_resource.package_format}")
-          key "#{new_resource.name}.#{new_resource.package_format}"
           key ::File.join(new_resource.name, ".#{new_resource.package_format}")
           bucket new_resource.s3_bucket
         end
