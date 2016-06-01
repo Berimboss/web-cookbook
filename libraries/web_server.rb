@@ -2,6 +2,7 @@ require 'poise'
 require 'chef/resource'
 require 'chef/provider'
 require_relative 'apache'
+require_relative '_nginx'
 
 module WebServer
   class Resource < Chef::Resource
@@ -190,10 +191,9 @@ module WebServer
         when valid_web_servers[0][:name]
           nginx_strategy
         when valid_web_servers[1][:name]
-          pkg = apache_strategy
+          apache_strategy
         end
       end
-      return pkg
     end
   end
 end

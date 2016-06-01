@@ -1,4 +1,3 @@
-include_recipe 'build-essential'
-web_server 'apache2' do
+web_server 'nginx' do
   action :build
 end
