@@ -6,10 +6,10 @@ provisioner:
   name: chef_zero
 
 platforms:
-  - name: centos-7.4
+  - name: centos-7.2
 
 suites:
   - name: default
     run_list:
-      - recipe[web::default]
+      - recipe[poise-web::default]
     attributes:

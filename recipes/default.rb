@@ -1,3 +1,1 @@
-web_server 'nginx' do
-  action :build
-end
+include_recipe 'poise-web::nginx_test'

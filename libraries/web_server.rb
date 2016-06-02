@@ -63,7 +63,7 @@ module WebServer
     def valid_web_servers
       [
         {
-          :name => 'nginx', :version => '9'
+          :name => 'nginx', :version => '1.10'
         },
         {
           :name => 'apache2', :version => '2.4.20'
@@ -176,8 +176,7 @@ module WebServer
       end
     end
     def nginx_strategy
-      # how to install nginx goes here
-      nil
+      nginx_server new_resource.name
     end
     def action_build
       if new_resource.resource_deps
@@ -189,9 +188,9 @@ module WebServer
       else
         case new_resource.name
         when valid_web_servers[0][:name]
-          nginx_strategy
+          self.nginx_strategy
         when valid_web_servers[1][:name]
-          apache_strategy
+          self.apache_strategy
         end
       end
     end
