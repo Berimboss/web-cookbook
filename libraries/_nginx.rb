@@ -21,7 +21,7 @@ module NginxServer
     attribute :go_get_builder, default: 'github.com/cubicdaiya/nginx-build'
     attribute :go_path, default: "#{::File.join(Chef::Config[:file_cache_path], 'go')}"
     attribute :nginx_build_directory, default: "#{::File.join(Chef::Config[:file_cache_path], 'nginx', 'build')}"
-    attribute :prefix_path, default: "#{::File.join(Chef::Config[:file_cache_path], 'nginx', 'stuff')}"
+    attribute :prefix_path, default: "#{::File.join(Chef::Config[:file_cache_path], 'nginx', 'pkg')}"
   end
   class  Provider < Chef::Provider
     include Poise
@@ -34,8 +34,8 @@ module NginxServer
         {:src => 'fastcgi_params.default.erb', :path => "#{::File.join(self.conf_dir)}/fastcgi_params.default"},
         {:src => 'koi-utf.erb', :path => "#{::File.join(self.conf_dir)}/koi-utf"},
         {:src => 'koi-win.erb', :path => "#{::File.join(self.conf_dir)}/koi-win"},
-        #{:src => 'mime.types.erb', :path => "#{::File.join(self.conf_dir)}/mime.types"},
-        #{:src => 'mime.types.default.erb', :path => "#{::File.join(self.conf_dir)}/mime.types.default"},
+        {:src => 'mime.types.erb', :path => "#{::File.join(self.conf_dir)}/mime.types"},
+        {:src => 'mime.types.default.erb', :path => "#{::File.join(self.conf_dir)}/mime.types.default"},
         #{:src => 'nginx.conf.erb', :path => "#{::File.join(self.conf_dir)}/nginx.conf"},
         #{:src => 'nginx.conf.default.erb', :path => "#{::File.join(self.conf_dir)}/nginx.conf.default"},
         #{:src => 'scgi_params.erb', :path => "#{::File.join(self.conf_dir)}/scgi_params"},
@@ -71,7 +71,7 @@ module NginxServer
     end
     def options
       [
-        #{:symbol => '--prefix-path', :value => self.prefix_path},
+        {:symbol => '--prefix', :value => self.prefix_path},
         {:symbol => '--sbin-path', :value => self.sbin_path},
         {:symbol => '--conf-path', :value => self.conf_path},
         {:symbol => '--pid-path', :value => self.pid_path},
