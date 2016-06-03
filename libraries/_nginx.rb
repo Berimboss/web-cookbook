@@ -141,6 +141,9 @@ module NginxServer
               sensitive true
             end
           end
+          fpm new_resource.name do
+            sources [new_resource.prefix_path]
+          end
         end
       end
     end
