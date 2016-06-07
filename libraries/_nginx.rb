@@ -22,10 +22,17 @@ module NginxServer
     attribute :go_path, default: "#{::File.join(Chef::Config[:file_cache_path], 'go')}"
     attribute :nginx_build_directory, default: "#{::File.join(Chef::Config[:file_cache_path], 'nginx', 'build')}"
     attribute :prefix_path, default: "#{::File.join(Chef::Config[:file_cache_path], 'nginx', 'pkg')}"
+    attribute :arch, default: 'x86_64'
+    attribute :pkg_extension, default: 'rpm'
   end
   class  Provider < Chef::Provider
     include Poise
     provides :nginx_server
+    def build_runit_services(context)
+      directory context[:runit_directory] do
+        recursive true
+      end
+    end
     def default_templates
       [
         {:src => 'fastcgi.conf.erb', :path => "#{::File.join(self.conf_dir)}/fastcgi.conf"},
@@ -81,6 +88,9 @@ module NginxServer
         {:symbol => '--group', :value => new_resource.group}
       ]
     end
+    def final_match_name
+      "#{new_resource.name}-#{new_resource.version}-1.#{new_resource.arch}-#{new_resource.pkg_extension}"
+    end
     def common
       [
        new_resource.git_source_path,
@@ -88,9 +98,6 @@ module NginxServer
        new_resource.go_path,
        self.prefix_path,
        self.sbin_dir,
-       #self.conf_path,
-       #self.error_log_path,
-       #self.http_log_path
       ].each do |dir|
         directory dir do
           recursive true
@@ -142,7 +149,13 @@ module NginxServer
             end
           end
           fpm new_resource.name do
-            sources [new_resource.prefix_path]
+            sources [new_resource.prefix_path, new_resource.nginx_build_directory]
+          end
+          bash "detection test" do
+            code <<-EOH
+            touch #{::File.join(Chef::Config[:file_cache_path], 'detection_test')}
+            EOH
+            not_if do ::File.exists?("#{::File.join(Chef::Config[:file_cache_path])}/#{self.final_match_name}") end
           end
         end
       end
