@@ -32,5 +32,6 @@ namespace :publishing do
     EOH
   end
   task :publish => [:up_minor_version, :git_update, :sync_berkshelf, :supermarket]
+  task :pre => [:up_minor_version, :git_update, :sync_berkshelf]
 end
-task :default => 'publishing:publish'
+task :default => 'publishing:pre'
