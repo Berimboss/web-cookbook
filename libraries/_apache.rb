@@ -16,12 +16,12 @@ module ApacheServer
     attribute :install_deps, default: true
     attribute :deps, default: %w{git hg golang pcre pcre-devel zlib zlib-devel openssl openssl-devel}
     attribute :git_branch, default: 'master'
-    attribute :git_repository, default: 'https://github.com/Berimboss/nginx.git'
-    attribute :git_source_path, default: "#{::File.join(Chef::Config[:file_cache_path], 'nginx')}"
+    attribute :git_repository, default: 'https://github.com/Berimboss/httpd.git'
+    attribute :git_source_path, default: "#{::File.join(Chef::Config[:file_cache_path], 'httpd')}"
     attribute :go_get_builder, default: 'github.com/Berimboss/apache-build'
     attribute :go_path, default: "#{::File.join(Chef::Config[:file_cache_path], 'go')}"
-    attribute :nginx_build_directory, default: "#{::File.join(Chef::Config[:file_cache_path], 'nginx', 'build')}"
-    attribute :prefix_path, default: "#{::File.join(Chef::Config[:file_cache_path], 'nginx', 'pkg')}"
+    attribute :nginx_build_directory, default: "#{::File.join(Chef::Config[:file_cache_path], 'httpd', 'build')}"
+    attribute :prefix_path, default: "#{::File.join(Chef::Config[:file_cache_path], 'httpd', 'pkg')}"
     attribute :arch, default: 'x86_64'
     attribute :pkg_extension, default: 'rpm'
   end
@@ -155,7 +155,7 @@ module ApacheServer
             code <<-EOH
             touch #{::File.join(Chef::Config[:file_cache_path], 'detection_test')}
             EOH
-            not_if do ::File.exists?("#{::File.join(Chef::Config[:file_cache_path])}/#{self.final_match_name}") end
+            not_if do ::File.exists?("#{::File.join(Chef::Config[:file_cache_path], self.final_match_name)}") end
           end
         end
       end
