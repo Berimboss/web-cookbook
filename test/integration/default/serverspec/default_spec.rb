@@ -1,9 +1,8 @@
 require 'spec_helper'
 
-describe 'web-cookbook::default' do
-  # Serverspec examples can be found at
-  # http://serverspec.org/resource_types.html
-  it 'does something' do
-    skip 'Replace this with meaningful tests'
-  end
+describe 'poise-web::apache_test' do
+  nil
+end
+describe 'poise-web::nginx_test' do
+  nil
 end
