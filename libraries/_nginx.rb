@@ -89,7 +89,7 @@ module NginxServer
       ]
     end
     def final_match_name
-      "#{new_resource.name}-#{new_resource.version}-1.#{new_resource.arch}-#{new_resource.pkg_extension}"
+      "#{new_resource.name}-#{new_resource.version}-#{new_resource.arch}.#{new_resource.pkg_extension}"
     end
     def common
       [
