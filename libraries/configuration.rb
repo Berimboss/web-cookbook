@@ -12,8 +12,9 @@ module Configuration
     attribute :mode, kind_of: String, required: true, default: '755'
     attribute :user, kind_of: String, required: true, default: 'root'
     attribute :group, kind_of: String, required: true, default: 'root'
-    attribute :root_dir, required: true, default: '/usr/local/apache2/conf/'
+    attribute :root_dir, required: true, default: ::File.join('/usr/', '/local/', '/apache2/', '/conf/')
     attribute :stub, required: true, default: 'httpd.conf.erb'
+    attribute :stub_out_name, default: 'httpd.conf'
     attribute :local_cookbook, kind_of:String, default: 'poise-web'
     attribute :context, required: true, default: {}
     attribute :includes, kind_of: Array, default: %w{globals ports modules forwarders statics}
@@ -26,7 +27,7 @@ module Configuration
         recursive true
       end
       new_resource.includes.each do |inc|
-        directory "#{new_resource.root_dir}#{inc}/" do
+        directory "#{::File.join(new_resource.root_dir, inc)}" do
           recursive true
         end
       end
@@ -34,7 +35,7 @@ module Configuration
     end
     def action_apply
       given_the_givens do
-        template "#{new_resource.root_dir}httpd.conf" do
+        template "#{::File.join(new_resource.root_dir, new_resource.stub_out_name)}" do
           user new_resource.user
           group new_resource.group
           mode new_resource.mode
@@ -53,7 +54,7 @@ module Configuration
       bash "purge all configurations" do
         cwd Chef::Config[:file_cache_path]
         code <<-EOH
-        rm -rf #{new_resource.root_dir}*
+        rm -rf #{::File.join(new_resource.root_dir, '*')}
         EOH
       end
     end
