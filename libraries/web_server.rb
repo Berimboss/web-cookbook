@@ -1,7 +1,8 @@
 require 'poise'
 require 'chef/resource'
 require 'chef/provider'
-require_relative 'apache'
+require_relative '_apache'
+require_relative '_nginx'
 
 module WebServer
   class Resource < Chef::Resource
@@ -11,6 +12,11 @@ module WebServer
 
     # name triggers implementation strategy
     attribute :name, name_attribute: true, kind_of: String
+    attribute :company
+    attribute :use_company, default: false
+    attribute :user, default: 'root'
+    attribute :group, default: 'root'
+    attribute :mode, default: '0777'
     attribute :resource_deps, default: true
     attribute :build_essential, default: 'build-essential'
     attribute :local_cookbook, kind_of:String, default: 'poise-web'
@@ -62,7 +68,7 @@ module WebServer
     def valid_web_servers
       [
         {
-          :name => 'nginx', :version => '9'
+          :name => 'nginx', :version => '1.10'
         },
         {
           :name => 'apache2', :version => '2.4.20'
@@ -175,8 +181,21 @@ module WebServer
       end
     end
     def nginx_strategy
-      # how to install nginx goes here
-      nil
+      if new_resource.use_company
+        nginx_server "#{new_resource.name}-#{new_resource.company}" do
+          user new_resource.user
+          group new_resource.group
+          mode new_resource.mode
+          version new_resource.httpd_version
+        end
+      else
+        nginx_server new_resource.name do
+          user new_resource.user
+          group new_resource.group
+          mode new_resource.mode
+          version new_resource.httpd_version
+        end
+      end
     end
     def action_build
       if new_resource.resource_deps
@@ -188,12 +207,11 @@ module WebServer
       else
         case new_resource.name
         when valid_web_servers[0][:name]
-          nginx_strategy
+          self.nginx_strategy
         when valid_web_servers[1][:name]
-          pkg = apache_strategy
+          self.apache_strategy
         end
       end
-      return pkg
     end
   end
 end
