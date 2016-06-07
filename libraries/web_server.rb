@@ -186,12 +186,14 @@ module WebServer
           user new_resource.user
           group new_resource.group
           mode new_resource.mode
+          version new_resource.httpd_version
         end
       else
         nginx_server new_resource.name do
           user new_resource.user
           group new_resource.group
           mode new_resource.mode
+          version new_resource.httpd_version
         end
       end
     end
