@@ -112,6 +112,7 @@ module NginxServer
        new_resource.go_path,
        self.prefix_path,
        self.sbin_dir,
+       self.conf_dir,
       ].each do |dir|
         directory dir do
           recursive true
