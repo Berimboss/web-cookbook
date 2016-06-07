@@ -168,8 +168,9 @@ module NginxServer
           bash "detection test" do
             code <<-EOH
             touch #{::File.join(Chef::Config[:file_cache_path], 'detection_test')}
+            echo "#{::File.join(Chef::Config[:file_cache_path], self.final_match_name)}" > /tmp/testingnstuff
             EOH
-            not_if do ::File.exists?("#{::File.join(Chef::Config[:file_cache_path])}/#{self.final_match_name}") end
+            not_if do ::File.exists?("#{::File.join(Chef::Config[:file_cache_path], self.final_match_name)}") end
           end
         end
       end
