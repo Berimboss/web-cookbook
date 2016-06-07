@@ -1,7 +1,7 @@
 require 'poise'
 require 'chef/resource'
 require 'chef/provider'
-require_relative 'apache'
+require_relative '_apache'
 require_relative '_nginx'
 
 module WebServer
@@ -14,6 +14,9 @@ module WebServer
     attribute :name, name_attribute: true, kind_of: String
     attribute :company
     attribute :use_company, default: false
+    attribute :user, default: 'root'
+    attribute :group, default: 'root'
+    attribute :mode, default: '0777'
     attribute :resource_deps, default: true
     attribute :build_essential, default: 'build-essential'
     attribute :local_cookbook, kind_of:String, default: 'poise-web'
