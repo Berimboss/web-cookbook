@@ -12,6 +12,8 @@ module WebServer
 
     # name triggers implementation strategy
     attribute :name, name_attribute: true, kind_of: String
+    attribute :company
+    attribute :use_company, default: false
     attribute :resource_deps, default: true
     attribute :build_essential, default: 'build-essential'
     attribute :local_cookbook, kind_of:String, default: 'poise-web'
@@ -176,7 +178,19 @@ module WebServer
       end
     end
     def nginx_strategy
-      nginx_server new_resource.name
+      if new_resource.use_company
+        nginx_server "#{new_resource.name}-#{new_resource.company}" do
+          user new_resource.user
+          group new_resource.group
+          mode new_resource.mode
+        end
+      else
+        nginx_server new_resource.name do
+          user new_resource.user
+          group new_resource.group
+          mode new_resource.mode
+        end
+      end
     end
     def action_build
       if new_resource.resource_deps
