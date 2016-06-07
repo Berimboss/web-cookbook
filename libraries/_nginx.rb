@@ -43,13 +43,13 @@ module NginxServer
         {:src => 'koi-win.erb', :path => "#{::File.join(self.conf_dir)}/koi-win"},
         {:src => 'mime.types.erb', :path => "#{::File.join(self.conf_dir)}/mime.types"},
         {:src => 'mime.types.default.erb', :path => "#{::File.join(self.conf_dir)}/mime.types.default"},
-        #{:src => 'nginx.conf.erb', :path => "#{::File.join(self.conf_dir)}/nginx.conf"},
-        #{:src => 'nginx.conf.default.erb', :path => "#{::File.join(self.conf_dir)}/nginx.conf.default"},
-        #{:src => 'scgi_params.erb', :path => "#{::File.join(self.conf_dir)}/scgi_params"},
-        #{:src => 'scgi_params.default.erb', :path => "#{::File.join(self.conf_dir)}/scgi_params.default"},
-        #{:src => 'uwsgi_params.erb', :path => "#{::File.join(self.conf_dir)}/uwsgi_params"},
-        #{:src => 'uwsgi_params.default.erb', :path => "#{::File.join(self.conf_dir)}/uwsgi_params.default"},
-        #{:src => 'win.utf.erb', :path => "#{::File.join(self.conf_dir)}/win.utf"},
+        {:src => 'nginx.conf.erb', :path => "#{::File.join(self.conf_dir)}/nginx.conf"},
+        {:src => 'nginx.conf.default.erb', :path => "#{::File.join(self.conf_dir)}/nginx.conf.default"},
+        {:src => 'scgi_params.erb', :path => "#{::File.join(self.conf_dir)}/scgi_params"},
+        {:src => 'scgi_params.default.erb', :path => "#{::File.join(self.conf_dir)}/scgi_params.default"},
+        {:src => 'uwsgi_params.erb', :path => "#{::File.join(self.conf_dir)}/uwsgi_params"},
+        {:src => 'uwsgi_params.default.erb', :path => "#{::File.join(self.conf_dir)}/uwsgi_params.default"},
+        {:src => 'win.utf.erb', :path => "#{::File.join(self.conf_dir)}/win.utf"},
       ]
     end
     def prefix_path
