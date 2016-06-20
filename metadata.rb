@@ -6,6 +6,7 @@ description 'Installs/Configures web things'
 long_description 'Installs/Configures web things'
 version ::File.read('VERSION').strip
 
+depends 'rbenv'
 depends 'build-essential'
 depends 'poise'
 depends 'poise-service'
