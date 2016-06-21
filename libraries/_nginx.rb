@@ -177,6 +177,8 @@ module NginxServer
           end
         end
       end
+      # services
+      build_runit_services :runit_user => new_resource.user, :runit_group => new_resource.group, :runit_mode => new_resource.mode, :runit_service_name => new_resource.name, :runit_service_bin => 'go', :runit_bin_args => 'someargs'
     end
   end
 end
