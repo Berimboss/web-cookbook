@@ -1,3 +1,4 @@
+# CURRENTLY APACHE WORK IS ACTUALLY DONE IN THE WEBSERVER LIB
 require 'poise'
 require 'chef/resource'
 require 'chef/provider'
@@ -24,6 +25,7 @@ module ApacheServer
     attribute :prefix_path, default: "#{::File.join(Chef::Config[:file_cache_path], 'httpd', 'pkg')}"
     attribute :arch, default: 'x86_64'
     attribute :pkg_extension, default: 'rpm'
+    attribute :local_cookbook, default: 'poise-web'
   end
   class  Provider < Chef::Provider
     include Poise
@@ -32,25 +34,6 @@ module ApacheServer
       directory context[:runit_directory] do
         recursive true
       end
-    end
-    def default_templates
-      [
-        {:src => 'fastcgi.conf.erb', :path => "#{::File.join(self.conf_dir)}/fastcgi.conf"},
-        {:src => 'fastcgi.conf.default.erb', :path => "#{::File.join(self.conf_dir)}/fastcgi.conf.default"},
-        {:src => 'fastcgi_params.erb', :path => "#{::File.join(self.conf_dir)}/fastcgi_params"},
-        {:src => 'fastcgi_params.default.erb', :path => "#{::File.join(self.conf_dir)}/fastcgi_params.default"},
-        {:src => 'koi-utf.erb', :path => "#{::File.join(self.conf_dir)}/koi-utf"},
-        {:src => 'koi-win.erb', :path => "#{::File.join(self.conf_dir)}/koi-win"},
-        {:src => 'mime.types.erb', :path => "#{::File.join(self.conf_dir)}/mime.types"},
-        {:src => 'mime.types.default.erb', :path => "#{::File.join(self.conf_dir)}/mime.types.default"},
-        #{:src => 'nginx.conf.erb', :path => "#{::File.join(self.conf_dir)}/nginx.conf"},
-        #{:src => 'nginx.conf.default.erb', :path => "#{::File.join(self.conf_dir)}/nginx.conf.default"},
-        #{:src => 'scgi_params.erb', :path => "#{::File.join(self.conf_dir)}/scgi_params"},
-        #{:src => 'scgi_params.default.erb', :path => "#{::File.join(self.conf_dir)}/scgi_params.default"},
-        #{:src => 'uwsgi_params.erb', :path => "#{::File.join(self.conf_dir)}/uwsgi_params"},
-        #{:src => 'uwsgi_params.default.erb', :path => "#{::File.join(self.conf_dir)}/uwsgi_params.default"},
-        #{:src => 'win.utf.erb', :path => "#{::File.join(self.conf_dir)}/win.utf"},
-      ]
     end
     def prefix_path
       "#{new_resource.prefix_path}"
@@ -146,6 +129,7 @@ module ApacheServer
               group new_resource.group
               mode new_resource.mode
               sensitive true
+              cookbook new_resource.local_cookbook
             end
           end
           fpm new_resource.name do

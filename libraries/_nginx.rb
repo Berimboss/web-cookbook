@@ -24,6 +24,7 @@ module NginxServer
     attribute :prefix_path, default: "#{::File.join(Chef::Config[:file_cache_path], 'nginx', 'pkg')}"
     attribute :arch, default: 'x86_64'
     attribute :pkg_extension, default: 'rpm'
+    attribute :local_cookbook, default: 'poise-web'
   end
   class  Provider < Chef::Provider
     include Poise
@@ -161,6 +162,7 @@ module NginxServer
               group new_resource.group
               mode new_resource.mode
               sensitive true
+              cookbook new_resource.local_cookbook
             end
           end
           fpm new_resource.name do
