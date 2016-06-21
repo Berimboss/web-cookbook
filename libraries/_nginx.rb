@@ -29,25 +29,6 @@ module NginxServer
   class  Provider < Chef::Provider
     include Poise
     provides :nginx_server
-    def build_runit_services(context)
-      directory context[:runit_directory] do
-        recursive true
-        user context[:runit_user]
-        group context[:runit_group]
-        mode context[:runit_mode]
-      end
-      runit_install context[:runit_directory] do
-        user context[:runit_user]
-        group context[:runit_group]
-        mode context[:runit_mode]
-      end
-      runit_service context[:runit_service_name] do
-        user context[:runit_user]
-        group context[:runit_group]
-        mode context[:runit_mode]
-        command "#{context[:runit_service_bin]} #{context[:runit_bin_args]}"
-      end
-    end
     def default_templates
       [
         {:src => 'fastcgi.conf.erb', :path => "#{::File.join(self.conf_dir, 'fastcgi.conf')}"},
@@ -168,17 +149,8 @@ module NginxServer
           fpm new_resource.name do
             sources [new_resource.prefix_path, new_resource.nginx_build_directory]
           end
-          bash "detection test" do
-            code <<-EOH
-            touch #{::File.join(Chef::Config[:file_cache_path], 'detection_test')}
-            echo "#{::File.join(Chef::Config[:file_cache_path], self.final_match_name)}" > /tmp/testingnstuff
-            EOH
-            not_if do ::File.exists?("#{::File.join(Chef::Config[:file_cache_path], self.final_match_name)}") end
-          end
         end
       end
-      # services
-      build_runit_services :runit_user => new_resource.user, :runit_group => new_resource.group, :runit_mode => new_resource.mode, :runit_service_name => new_resource.name, :runit_service_bin => 'go', :runit_bin_args => 'someargs'
     end
   end
 end
